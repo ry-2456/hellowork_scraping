@@ -43,7 +43,7 @@ def scraping(html):
     payment = []          # 賃金
     work_times = []        # 就業時間
     day_off = []          # 休日
-    age_limit = []        # 年齢
+    age_limits = []        # 年齢
     offer_numbers = []    # 求人番号
 
 
@@ -69,7 +69,8 @@ def scraping(html):
                 companies.append(table_data[1].div.string)
 
             elif row_name == "就業場所":
-                locations.append(table_data[1].div.string)
+                # locations.append(table_data[1].div.string)
+                locations.append(remove_extra_chars(table_data[1].div.text))
 
             elif row_name == "仕事の内容":
                 job_descriptions.append(table_data[1].div.text)
@@ -90,13 +91,13 @@ def scraping(html):
                 day_off.append(table_data[1].div.string)
 
             elif row_name == "年齢":
-                # age_limit.append(table_data[1].contents)
-                age_limit.append(remove_extra_chars(table_data[1].text))
+                # age_limits.append(table_data[1].contents)
+                age_limits.append(remove_extra_chars(table_data[1].text))
 
             elif row_name == "求人番号":
                 offer_numbers.append(table_data[1].div.string)
 
-    show_length_and_elems(offer_numbers)
+    # show_length_and_elems(offer_numbers)
 
     # Noneを削除
     # occupations = [elem for elem in occupations if elem is not None]
@@ -110,21 +111,36 @@ def scraping(html):
     
     # return (companies, offer_numbers)
     # return (companies, occupations, offer_numbers)
+    for col in  [occupations, job_division, companies, locations, job_descriptions,
+            emp_styles, payment, work_times, day_off, age_limits, offer_numbers]:
+        print(len(col))
+    return [occupations, job_division, companies, locations, job_descriptions,
+            emp_styles, payment, work_times, day_off, age_limits, offer_numbers]
+
 
 def read_html(full_path):
     "full_pathで指定された、ファイルを読み込みその中身を返す"
     with open(full_path) as f:
         return f.read()
 
-def write_joboffer_info(full_path, companies, occupations, offer_numbers):
+def write_joboffer_info(full_path, ll):
+    # 2次元配列をfull_pathで指定されたファイルに書き込む
     # companies     :     会社の名前のリスト
     # offer_numbers : 求人番号
     lines = []
     # for c, o in zip(companies, offer_numbers):
     #     lines.append([c, o])
+    col_n = len(ll)     # 列の数
+    row_n = len(ll[0])  # recordの数
 
-    for comp, occup, off_num in zip(companies, occupations, offer_numbers):
-        lines.append([comp, occup, off_num])
+    for i in range(row_n):
+        record = [] 
+        for j in range(col_n):
+            record.append(ll[j][i])
+        lines.append(record)
+
+    # for comp, occup, off_num in zip(companies, occupations, offer_numbers):
+    #     lines.append([comp, occup, off_num])
 
     with open(full_path, mode="a") as f:
         writer = csv.writer(f)
@@ -156,17 +172,17 @@ def test(full_path):
         del_tab()
         # スクレイピングを行う
         # comp_names, occups, offer_nums = scraping(html)
-        scraping(html)
-        break
+        res = scraping(html)
         # csvファイルに書き込み
-        write_joboffer_info(full_path, comp_names, occups, offer_nums)
+        # write_joboffer_info(full_path, comp_names, occups, offer_nums)
+        write_joboffer_info(full_path, res)
         # 次のページへ
         go_next_page()
         time.sleep(1)
 
 
 if __name__ == "__main__":
-    file_path = "/home/t-rin/brother_project/hello_work_scraping/"
+    file_path = "/home/t-rin/programming_project/brother_project/hello_work_scraping/"
     file_name = "joboffer_info.csv"
     test(file_path + file_name)
     # main(file_path + file_name)
