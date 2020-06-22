@@ -93,10 +93,10 @@ def scraping(html):
                 # age_limit.append(table_data[1].contents)
                 age_limit.append(remove_extra_chars(table_data[1].text))
 
-            # elif row_name == "求人番号":
-            #     offer_numbers.append(table_data[1].div.string)
+            elif row_name == "求人番号":
+                offer_numbers.append(table_data[1].div.string)
 
-    show_length_and_elems(age_limit)
+    show_length_and_elems(offer_numbers)
 
     # Noneを削除
     # occupations = [elem for elem in occupations if elem is not None]
