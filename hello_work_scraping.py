@@ -81,14 +81,15 @@ def scraping(html):
                 # work_times.append(table_data[1].text)
                 # work_times.append(table_data[1].div.string)
 
-            # elif row_name == "休日":
-            #     companies.append(table_data[1].div.string)
+            elif row_name == "休日":
+                day_off.append(table_data[1].div.string)
+
             # elif row_name == "年齢":
             #     companies.append(table_data[1].div.string)
             # elif row_name == "求人番号":
             #     offer_numbers.append(table_data[1].div.string)
 
-    show_length_and_elems(work_times)
+    show_length_and_elems(day_off)
 
     # Noneを削除
     # occupations = [elem for elem in occupations if elem is not None]
