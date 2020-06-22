@@ -73,6 +73,7 @@ def scraping(html):
             #     companies.append(table_data[1].div.string)
             # elif row_name == "求人番号":
             #     offer_numbers.append(table_data[1].div.string)
+
     show_length_and_elems(locations)
 
     # Noneを削除
