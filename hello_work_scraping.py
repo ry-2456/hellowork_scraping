@@ -56,12 +56,10 @@ def scraping(html):
             if row_name is None: continue
             if row_name == "求人区分":
                 job_division.append(table_data[1].div.string)
-            # elif row_name == "事業所名":
-            #     companies.append(table_data[1].div.string)
-            #     print("事業所名: {}".format(table_data[0].div.string))
-            # elif row_name == "就業場所":
-            #     companies.append(table_data[1].div.string)
-            #     print("就業場所: {}".format(table_data[0].div.string))
+            elif row_name == "事業所名":
+                companies.append(table_data[1].div.string)
+            elif row_name == "就業場所":
+                locations.append(table_data[1].div.string)
             # elif row_name == "仕事の内容":
             #     companies.append(table_data[1].div.text)
             #     print("仕事の内容: {}".format(table_data[0].div.string))
@@ -75,7 +73,7 @@ def scraping(html):
             #     companies.append(table_data[1].div.string)
             # elif row_name == "求人番号":
             #     offer_numbers.append(table_data[1].div.string)
-    show_length_and_elems(job_division)
+    show_length_and_elems(locations)
 
     # Noneを削除
     # occupations = [elem for elem in occupations if elem is not None]
