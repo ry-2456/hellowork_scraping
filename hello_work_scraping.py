@@ -44,38 +44,38 @@ def scraping(html):
     # 職種を取得
     for head in kyujin_heads:
         occupations.append(head.find("tr").find_all("td")[1].div.string)
-    show_length_and_elems(occupations)
+    # show_length_and_elems(occupations)
     
 
     # 会社名, 求人番号を取得
-    # for body in kyujin_bodys:
-    #     body_row = body.find_all("tr")
-    #     for i in range(len(body_row)):
-    #         table_data = body_row[i].find_all("td")  # 全テーブルデータを取得
-    #         row_name = table_data[0].string          # データの名称を取得
-    #         if row_name is None: continue
-    #         if row_name == "求人区分":
-    #             job_division.append(table_data[0].div.string)
-    #             print("求人区分: {}".format(table_data[0].div.string))
-    #         elif row_name == "事業所名":
-    #             companies.append(table_data[1].div.string)
-    #             print("事業所名: {}".format(table_data[0].div.string))
-    #         elif row_name == "就業場所":
-    #             companies.append(table_data[1].div.string)
-    #             print("就業場所: {}".format(table_data[0].div.string))
-    #         elif row_name == "仕事の内容":
-    #             companies.append(table_data[1].div.text)
-    #             print("仕事の内容: {}".format(table_data[0].div.string))
-    #         # elif row_name == "雇用形態":
-    #         #     companies.append(table_data[1].div.string)
-    #         # elif row_name == "賃金":
-    #         #     companies.append(table_data[1].div.string)
-    #         # elif row_name == "休日":
-    #         #     companies.append(table_data[1].div.string)
-    #         # elif row_name == "年齢":
-    #         #     companies.append(table_data[1].div.string)
-    #         # elif row_name == "求人番号":
-    #         #     offer_numbers.append(table_data[1].div.string)
+    for body in kyujin_bodys:
+        body_row = body.find_all("tr")
+        for i in range(len(body_row)):
+            table_data = body_row[i].find_all("td")  # 全テーブルデータを取得
+            row_name = table_data[0].string          # データの名称を取得
+            if row_name is None: continue
+            if row_name == "求人区分":
+                job_division.append(table_data[1].div.string)
+            # elif row_name == "事業所名":
+            #     companies.append(table_data[1].div.string)
+            #     print("事業所名: {}".format(table_data[0].div.string))
+            # elif row_name == "就業場所":
+            #     companies.append(table_data[1].div.string)
+            #     print("就業場所: {}".format(table_data[0].div.string))
+            # elif row_name == "仕事の内容":
+            #     companies.append(table_data[1].div.text)
+            #     print("仕事の内容: {}".format(table_data[0].div.string))
+            # elif row_name == "雇用形態":
+            #     companies.append(table_data[1].div.string)
+            # elif row_name == "賃金":
+            #     companies.append(table_data[1].div.string)
+            # elif row_name == "休日":
+            #     companies.append(table_data[1].div.string)
+            # elif row_name == "年齢":
+            #     companies.append(table_data[1].div.string)
+            # elif row_name == "求人番号":
+            #     offer_numbers.append(table_data[1].div.string)
+    show_length_and_elems(job_division)
 
     # Noneを削除
     # occupations = [elem for elem in occupations if elem is not None]
