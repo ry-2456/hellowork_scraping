@@ -16,6 +16,11 @@ def show_length_and_elems(l):
     for i, e in enumerate(l):
         print(i, e)
 
+def remove_extra_chars(s):
+    # 文字列sから\n,\t,\sを取り除く
+    return s.replace('　', '').replace('\t','').replace('\n','')
+
+
 def scraping(html):
     # set BeautifulSoup インスタンスの作成
     soup = BeautifulSoup(html, "html.parser") 
@@ -77,19 +82,21 @@ def scraping(html):
                 payment.append(table_data[1].div.contents[3].string)
 
             elif row_name == "就業時間":
-                work_times.append(table_data[1].text.replace('　', '').replace('\t','').replace('\n',''))
+                work_times.append(remove_extra_chars(table_data[1].text))
                 # work_times.append(table_data[1].text)
                 # work_times.append(table_data[1].div.string)
 
             elif row_name == "休日":
                 day_off.append(table_data[1].div.string)
 
-            # elif row_name == "年齢":
-            #     companies.append(table_data[1].div.string)
+            elif row_name == "年齢":
+                # age_limit.append(table_data[1].contents)
+                age_limit.append(remove_extra_chars(table_data[1].text))
+
             # elif row_name == "求人番号":
             #     offer_numbers.append(table_data[1].div.string)
 
-    show_length_and_elems(day_off)
+    show_length_and_elems(age_limit)
 
     # Noneを削除
     # occupations = [elem for elem in occupations if elem is not None]
