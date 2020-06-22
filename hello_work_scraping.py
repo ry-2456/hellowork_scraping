@@ -27,18 +27,18 @@ def scraping(html):
     # kyujin_footsを詳細ボタンを持っているものに絞り込む
     # kyujin_foots = [elem for elem in kyujin_foots if elem.find("a") is not None]
 
-    occupations = []     # 職種
+    occupations = []      # 職種
 
-    job_division = []    # 求人区分
-    companies = []       # 会社の名前
-    locations = []       # 就業場所
+    job_division = []     # 求人区分
+    companies = []        # 会社の名前
+    locations = []        # 就業場所
     job_descriptions = [] # 仕事の内容
-    emp_style = []       # 雇用形態
-    payment = []         # 賃金
-    work_time = []       # 就業時間
-    day_off = []         # 休日
-    age_limit = []       # 年齢
-    offer_numbers = []   # 求人番号
+    emp_styles = []       # 雇用形態
+    payment = []          # 賃金
+    work_time = []        # 就業時間
+    day_off = []          # 休日
+    age_limit = []        # 年齢
+    offer_numbers = []    # 求人番号
 
 
     # 職種を取得
@@ -66,9 +66,8 @@ def scraping(html):
             elif row_name == "仕事の内容":
                 job_descriptions.append(table_data[1].div.text)
 
-            #     print("仕事の内容: {}".format(table_data[0].div.string))
-            # elif row_name == "雇用形態":
-            #     companies.append(table_data[1].div.string)
+            elif row_name == "雇用形態":
+                emp_styles.append(table_data[1].div.string)
             # elif row_name == "賃金":
             #     companies.append(table_data[1].div.string)
             # elif row_name == "休日":
@@ -78,7 +77,7 @@ def scraping(html):
             # elif row_name == "求人番号":
             #     offer_numbers.append(table_data[1].div.string)
 
-    show_length_and_elems(job_descriptions)
+    show_length_and_elems(emp_styles)
 
     # Noneを削除
     # occupations = [elem for elem in occupations if elem is not None]
