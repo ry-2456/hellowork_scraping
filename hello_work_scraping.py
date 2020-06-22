@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-	
+import re
 import csv
 import pprint
 from urllib import request
@@ -35,7 +36,7 @@ def scraping(html):
     job_descriptions = [] # 仕事の内容
     emp_styles = []       # 雇用形態
     payment = []          # 賃金
-    work_time = []        # 就業時間
+    work_times = []        # 就業時間
     day_off = []          # 休日
     age_limit = []        # 年齢
     offer_numbers = []    # 求人番号
@@ -74,6 +75,12 @@ def scraping(html):
             elif  "賃金" in row_name and "手当等" in row_name:
                 # payment.append(table_data[1].div.text)
                 payment.append(table_data[1].div.contents[3].string)
+
+            elif row_name == "就業時間":
+                work_times.append(table_data[1].text.replace('　', '').replace('\t','').replace('\n',''))
+                # work_times.append(table_data[1].text)
+                # work_times.append(table_data[1].div.string)
+
             # elif row_name == "休日":
             #     companies.append(table_data[1].div.string)
             # elif row_name == "年齢":
@@ -81,7 +88,7 @@ def scraping(html):
             # elif row_name == "求人番号":
             #     offer_numbers.append(table_data[1].div.string)
 
-    show_length_and_elems(payment)
+    show_length_and_elems(work_times)
 
     # Noneを削除
     # occupations = [elem for elem in occupations if elem is not None]
