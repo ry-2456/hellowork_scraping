@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-	
 import re
 import csv
+import sys
+import math
 import pprint
 from urllib import request
 from bs4 import BeautifulSoup
@@ -11,6 +13,12 @@ from browser_manipulator import *
 # 全国・未経験可・ソフトウェア
 # 職種　技術職 ソフトウェア開発技術者
 
+def get_searched_num(html):
+    # 検索結果数を取得する
+    soup = BeautifulSoup(html, "html.parser")
+    res = soup.find("div", class_="align_end")
+    return int(res.div.div.span.string[:-1])
+
 def show_length_and_elems(l):
     print("length: {}".format(len(l)))
     for i, e in enumerate(l):
@@ -19,8 +27,6 @@ def show_length_and_elems(l):
 def remove_extra_chars(s):
     # 文字列sから\n,\t,\sを取り除く
     return s.replace('　', '').replace('\t','').replace('\n','')
-
-
 
 def scraping(html):
     # set BeautifulSoup インスタンスの作成
@@ -135,9 +141,13 @@ def write_joboffer_info(full_path, ll):
 def main(full_path):
     # vimの画面からブラウザへ
     switch_window()
-    for i in range(3090//30+1):
+    html = get_html()
+    del_tab()
+    searched_num = get_searched_num(html)
+
+    for i in range(math.ceil(searched_num/30.0)):
         print("###### {} ######".format(i+1))
-        # html取得
+        # htmlを取得
         html = get_html()
         # htmlのページを閉じる
         del_tab()
@@ -150,13 +160,15 @@ def main(full_path):
         time.sleep(1)
 
 def test(full_path):  
-    for i in range(5):
+    for i in range(1):
         print("###### {} ######".format(i+1))
         html = get_html()
         # htmlのページを閉じる
         del_tab()
         # スクレイピングを行う
         res = scraping(html)
+        get_searched_num(html)
+        break
         # csvファイルに書き込み
         write_joboffer_info(full_path, res)
         # 次のページへ
