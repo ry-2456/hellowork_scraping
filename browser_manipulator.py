@@ -13,10 +13,16 @@ def del_tab():
 
 def go_next_page():
     "次のページに行く"
+    # pyautogui.click(x=1320, y=610, clicks=1)
     pyautogui.click(x=1320, y=610, clicks=1)
-    pyautogui.hotkey("ctrl", "end")
+    time.sleep(1)
+    # pyautogui.hotkey("ctrl", "end")
+    pyautogui.scroll(-5000)
     time.sleep(0.5)
-    pyautogui.click(x=1243, y=617, clicks=1)
+    # pyautogui.click(x=1243, y=617, clicks=1)
+    pyautogui.click(x=1243, y=619, clicks=1)
+    time.sleep(0.1)
+    pyautogui.click(x=1243, y=622, clicks=1)
     # pyautogui.scroll(500, x=1320, y=610)
 
 def get_html():
@@ -25,7 +31,7 @@ def get_html():
     # 現在のページのhtmlを表示
     pyautogui.click(x=1320, y=610, clicks=1)
     pyautogui.hotkey("ctrl", "u")
-    time.sleep(4)
+    time.sleep(4.5)
 
     # htmlの内容をクリップボードにコピーし、変数htmlに格納
     pyautogui.hotkey("ctrl", "a")

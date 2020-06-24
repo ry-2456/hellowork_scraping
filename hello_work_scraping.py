@@ -21,6 +21,7 @@ def remove_extra_chars(s):
     return s.replace('　', '').replace('\t','').replace('\n','')
 
 
+
 def scraping(html):
     # set BeautifulSoup インスタンスの作成
     soup = BeautifulSoup(html, "html.parser") 
@@ -33,18 +34,18 @@ def scraping(html):
     # kyujin_footsを詳細ボタンを持っているものに絞り込む
     # kyujin_foots = [elem for elem in kyujin_foots if elem.find("a") is not None]
 
-    occupations = []      # 職種
+    occupations      = []    # 職種
 
-    job_division = []     # 求人区分
-    companies = []        # 会社の名前
-    locations = []        # 就業場所
-    job_descriptions = [] # 仕事の内容
-    emp_styles = []       # 雇用形態
-    payment = []          # 賃金
-    work_times = []        # 就業時間
-    day_off = []          # 休日
-    age_limits = []        # 年齢
-    offer_numbers = []    # 求人番号
+    job_division     = []    # 求人区分
+    companies        = []    # 会社の名前
+    locations        = []    # 就業場所
+    job_descriptions = []    # 仕事の内容
+    emp_styles       = []    # 雇用形態
+    payment          = []    # 賃金
+    work_times       = []    # 就業時間
+    day_off          = []    # 休日
+    age_limits       = []    # 年齢
+    offer_numbers    = []    # 求人番号
 
 
     # 職種を取得
@@ -97,26 +98,17 @@ def scraping(html):
             elif row_name == "求人番号":
                 offer_numbers.append(table_data[1].div.string)
 
-    # show_length_and_elems(offer_numbers)
-
-    # Noneを削除
-    # occupations = [elem for elem in occupations if elem is not None]
-    # companies = [elem for elem in companies if elem is not None]
-    # offer_numbers = [elem for elem in offer_numbers if elem is not None]
-
-    # print("after")
-    # print("len(occupations): {}".format(len(occupations)))
-    # print("len(companies): {}".format(len(companies)))
-    # print("len(offer_numbers): {}".format(len(offer_numbers)))
-    
-    # return (companies, offer_numbers)
-    # return (companies, occupations, offer_numbers)
-    for col in  [occupations, job_division, companies, locations, job_descriptions,
-            emp_styles, payment, work_times, day_off, age_limits, offer_numbers]:
-        print(len(col))
-    return [occupations, job_division, companies, locations, job_descriptions,
-            emp_styles, payment, work_times, day_off, age_limits, offer_numbers]
-
+    return [occupations, 
+            job_division, 
+            companies, 
+            locations, 
+            job_descriptions, 
+            emp_styles, 
+            payment, 
+            work_times, 
+            day_off, 
+            age_limits,     
+            offer_numbers]
 
 def read_html(full_path):
     "full_pathで指定された、ファイルを読み込みその中身を返す"
@@ -124,12 +116,9 @@ def read_html(full_path):
         return f.read()
 
 def write_joboffer_info(full_path, ll):
-    # 2次元配列をfull_pathで指定されたファイルに書き込む
-    # companies     :     会社の名前のリスト
-    # offer_numbers : 求人番号
+    # llはリストのリスト
+    # full_pathで指定されたファイルに書き込む
     lines = []
-    # for c, o in zip(companies, offer_numbers):
-    #     lines.append([c, o])
     col_n = len(ll)     # 列の数
     row_n = len(ll[0])  # recordの数
 
@@ -139,9 +128,6 @@ def write_joboffer_info(full_path, ll):
             record.append(ll[j][i])
         lines.append(record)
 
-    # for comp, occup, off_num in zip(companies, occupations, offer_numbers):
-    #     lines.append([comp, occup, off_num])
-
     with open(full_path, mode="a") as f:
         writer = csv.writer(f)
         writer.writerows(lines) 
@@ -149,17 +135,16 @@ def write_joboffer_info(full_path, ll):
 def main(full_path):
     # vimの画面からブラウザへ
     switch_window()
-    for i in range(2426//30+1):
+    for i in range(3090//30+1):
         print("###### {} ######".format(i+1))
         # html取得
         html = get_html()
         # htmlのページを閉じる
         del_tab()
         # スクレイピングを行う
-        comp_names, occups, offer_nums = scraping(html)
-        break
+        res = scraping(html)
         # csvファイルに書き込み
-        write_joboffer_info(full_path, comp_names, occups, offer_nums)
+        write_joboffer_info(full_path, res)
         # 次のページヘ
         go_next_page()
         time.sleep(1)
@@ -171,18 +156,15 @@ def test(full_path):
         # htmlのページを閉じる
         del_tab()
         # スクレイピングを行う
-        # comp_names, occups, offer_nums = scraping(html)
         res = scraping(html)
         # csvファイルに書き込み
-        # write_joboffer_info(full_path, comp_names, occups, offer_nums)
         write_joboffer_info(full_path, res)
         # 次のページへ
         go_next_page()
         time.sleep(1)
 
-
 if __name__ == "__main__":
     file_path = "/home/t-rin/programming_project/brother_project/hello_work_scraping/"
     file_name = "joboffer_info.csv"
-    test(file_path + file_name)
-    # main(file_path + file_name)
+    # test(file_path + file_name)
+    main(file_path + file_name)
