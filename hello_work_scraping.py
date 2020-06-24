@@ -17,7 +17,7 @@ def get_searched_num(html):
     # 検索結果数を取得する
     soup = BeautifulSoup(html, "html.parser")
     res = soup.find("div", class_="align_end")
-    return int(res.div.div.span.string[:-1])
+    return int(res.div.div.span.string[:-1]) # 件という文字を取り除く
 
 def show_length_and_elems(l):
     print("length: {}".format(len(l)))
