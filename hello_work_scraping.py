@@ -13,6 +13,8 @@ from browser_manipulator import *
 # 全国・未経験可・ソフトウェア
 # 職種　技術職 ソフトウェア開発技術者
 
+added_comp_name = []
+
 def get_searched_num(html):
     # 検索結果数を取得する
     soup = BeautifulSoup(html, "html.parser")
@@ -73,7 +75,8 @@ def scraping(html):
                 job_division.append(table_data[1].div.string)
 
             elif row_name == "事業所名":
-                companies.append(table_data[1].div.string)
+                # companies.append(table_data[1].div.string)
+                companies.append(table_data[1].div.text) # textはタグ内に含まれる文字列をつなぎ合わせて返す
 
             elif row_name == "就業場所":
                 # locations.append(table_data[1].div.string)
@@ -103,18 +106,33 @@ def scraping(html):
 
             elif row_name == "求人番号":
                 offer_numbers.append(table_data[1].div.string)
+    
+    c = len(companies)
+    add_idx = []
+    # 事業所名を公開していない会社と重複を省く
+    for i, name in enumerate(companies):
+        if "公開していません" not in name and name not in added_comp_name:
+            add_idx.append(i)
+            added_comp_name.append(name)
 
-    return [occupations, 
-            job_division, 
-            companies, 
-            locations, 
-            job_descriptions, 
-            emp_styles, 
-            payment, 
-            work_times, 
-            day_off, 
-            age_limits,     
-            offer_numbers]
+    info = []
+    for l in  [companies, occupations, job_division,locations, job_descriptions, emp_styles, 
+            payment, work_times, day_off, age_limits, offer_numbers]:
+        l = [l[i] for i in range(c) if i in add_idx]
+        info.append(l)
+
+    return info
+    # return [companies, 
+    #         occupations, 
+    #         job_division, 
+    #         locations, 
+    #         job_descriptions, 
+    #         emp_styles, 
+    #         payment, 
+    #         work_times, 
+    #         day_off, 
+    #         age_limits,     
+    #         offer_numbers]
 
 def read_html(full_path):
     "full_pathで指定された、ファイルを読み込みその中身を返す"
@@ -134,18 +152,20 @@ def write_joboffer_info(full_path, ll):
             record.append(ll[j][i])
         lines.append(record)
 
-    with open(full_path, mode="a") as f:
+    with open(full_path, mode="a", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(lines) 
 
 def main(full_path):
     # vimの画面からブラウザへ
+    # 検索件数を取得
     switch_window()
     html = get_html()
     del_tab()
     searched_num = get_searched_num(html)
-
-    for i in range(math.ceil(searched_num/30.0)):
+    
+    # 表示件数を自動で取得できるようにしよう
+    for i in range(math.ceil(searched_num/50.0)):
         print("###### {} ######".format(i+1))
         # htmlを取得
         html = get_html()
@@ -157,7 +177,7 @@ def main(full_path):
         write_joboffer_info(full_path, res)
         # 次のページヘ
         go_next_page()
-        time.sleep(1)
+        time.sleep(3)
 
 def test(full_path):  
     for i in range(1):
@@ -176,7 +196,8 @@ def test(full_path):
         time.sleep(1)
 
 if __name__ == "__main__":
-    file_path = "/home/t-rin/programming_project/brother_project/hello_work_scraping/"
-    file_name = "joboffer_info.csv"
+    # file_path = "/home/t-rin/programming_project/brother_project/hello_work_scraping/"
+    file_path = "./"
+    file_name = input("input file name > ")
     # test(file_path + file_name)
     main(file_path + file_name)
