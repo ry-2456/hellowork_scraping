@@ -38,7 +38,7 @@ pycodestyle==2.6.0
 pycparser==2.20
 pyee==7.0.2
 PyGetWindow==0.0.8
-Pygments==2.6.1
+Pygments==2.7.4
 PyMsgBox==1.0.7
 pyperclip==1.8.0
 pyppeteer==0.0.25
